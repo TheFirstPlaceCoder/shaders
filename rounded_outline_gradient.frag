@@ -2,6 +2,7 @@
 
 uniform float round;
 uniform float thickness;
+uniform float test;
 uniform vec2 size;
 uniform vec4 color1;
 uniform vec4 color2;
@@ -16,7 +17,7 @@ float alpha(vec2 d, vec2 d1) {
 void main() {
 vec2 coords = gl_TexCoord[0].st;
     vec2 centre = .5f * size;
-    vec2 smoothness = vec2(thickness - 1.5f, thickness);
+    vec2 smoothness = vec2(thickness - test, thickness);
     vec4 color = mix(mix(color1, color2, coords.y), mix(color3, color4, coords.y), coords.x);
     gl_FragColor = vec4(color.rgb, color.a * (1.f - smoothstep(smoothness.x, smoothness.y, abs(alpha(centre - (gl_TexCoord[0].st * size), centre - thickness)))));
 }
