@@ -1,3 +1,5 @@
+#version 120
+
 uniform float round;
 uniform float thickness;
 uniform float glowRadius;
