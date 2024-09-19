@@ -13,8 +13,5 @@ float alpha(vec2 p, vec2 b) {
 
 void main() {
     vec2 centre = .5f * size;
-    float centreSize = (gl_TexCoord[0].st * size);
-    float realAlpha = alpha(centre - centreSize, centre - radius - softness);
-    float finalAlpha = minx - smoothstep(-softness * coef, softness * coef, realAlpha);
-    gl_FragColor = vec4(color.rgb, color.a * finalAlpha);
+    gl_FragColor = vec4(color.rgb, color.a * (minx - smoothstep(-softness * coef, softness * coef, alpha(centre - (gl_TexCoord[0].st * size), centre - radius - softness))));
 }
