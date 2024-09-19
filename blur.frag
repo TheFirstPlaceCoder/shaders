@@ -6,36 +6,12 @@ uniform vec2 size;
 uniform vec4 color;
 
 float alpha(vec2 p, vec2 b) {
-    return length(max(abs(p) - b, .0f)) - radius;
-}
-
-vec4 blendColors(vec2 uv) {
-    vec4 totalColor = vec4(0.0);
-    float totalWeight = 0.0;
-    int blurSize = 8;
-
-    for (int x = -blurSize; x <= blurSize; ++x) {
-        for (int y = -blurSize; y <= blurSize; ++y) {
-            vec2 offset = vec2(x, y) / size;
-            vec2 sampleUV = uv + offset;
-            float weight = exp(-length(offset) * 8.0);
-            vec4 sampleColor = vec4(color.rgb * (1.0 - length(sampleUV - vec2(0.5)) * 2.0), color.a);
-            totalColor += sampleColor * weight;
-            totalWeight += weight;
-        }
-    }
-
-    if (totalWeight > 0.0) {
-        totalColor /= totalWeight;
-    }
-
-    return totalColor;
+    return length(max(abs(p) - b, vec2(0.0))) - radius;
 }
 
 void main() {
-    vec2 uv = gl_TexCoord[0].st;
     vec2 centre = 0.5 * size;
-    vec4 blurredColor = blendColors(uv);
-    float a = 1.0 - smoothstep(-softness, softness, alpha(centre - (uv * size), centre - radius - softness));
-    gl_FragColor = vec4(blurredColor.rgb, blurredColor.a * a);
+    float dist = alpha(centre - (gl_TexCoord[0].st * size), centre - radius);
+    float smoothAlpha = smoothstep(-softness * 1.5, softness * 1.5, dist);
+    gl_FragColor = vec4(color.rgb, color.a * (1.0 - smoothAlpha));
 }
