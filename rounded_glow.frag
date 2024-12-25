@@ -1,7 +1,7 @@
 #version 120
 
 uniform float softness;
-uniform float alpha;
+uniform float alphaStart;
 uniform float radius;
 uniform float glowRadius;
 uniform vec2 size;
@@ -18,5 +18,5 @@ void main() {
     vec2 centre = .5f * size;
     vec2 coords = gl_TexCoord[0].st;
     vec4 color = mix(mix(color1, color2, coords.y), mix(color3, color4, coords.y), coords.x);
-    gl_FragColor = vec4(color.rgb, color.a * (alpha - smoothstep(-softness * glowRadius, softness * glowRadius, alpha(centre - (gl_TexCoord[0].st * size), centre - radius - softness))));
+    gl_FragColor = vec4(color.rgb, color.a * (alphaStart - smoothstep(-softness * glowRadius, softness * glowRadius, alpha(centre - (gl_TexCoord[0].st * size), centre - radius - softness))));
 }
